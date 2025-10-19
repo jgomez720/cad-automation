@@ -1,0 +1,31 @@
+name: Onshape Mass Check
+
+on:
+  workflow_dispatch:
+
+jobs:
+  mass-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run mass check script
+        env:
+          # Inject GitHub secrets into environment variables
+          ONSHAPE_ACCESS_KEY: ${{ secrets.ONSHAPE_ACCESS_KEY }}
+          ONSHAPE_SECRET_KEY: ${{ secrets.ONSHAPE_SECRET_KEY }}
+          
+          # Regular env vars too (IDs, thresholds, etc.)
+          ONSHAPE_DID: ${{ vars.ONSHAPE_DID }}    # Document ID
+          ONSHAPE_WID: ${{ vars.ONSHAPE_WID }}    # Workspace ID
+          ONSHAPE_EID: ${{ vars.ONSHAPE_EID }}    # Element ID
+        run: scripts/get_mass.py
