@@ -37,3 +37,10 @@ jobs:
         run: |
           echo "Target mass (kg): $TARGET_MASS"
           echo "Measured mass: $MEASURED_MASS_KG kg"
+
+          if (( $(echo "$MEASURED_MASS_KG > $TARGET_MASS_KG" | bc -l) )); then
+            echo "Mass is greater than allowable target mass. Please revise the design."
+            exit 1
+          else
+            echo "Mass check passed. Design is within target mass."
+          fi
