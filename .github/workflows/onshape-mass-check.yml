@@ -35,7 +35,7 @@ jobs:
         env:
           TARGET_MASS_KG: ${{ secrets.TARGET_MASS }}
         run: |
-          echo "Target mass (kg): $TARGET_MASS"
+          echo "Target mass (kg): $TARGET_MASS_KG"
           echo "Measured mass: $MEASURED_MASS_KG kg"
 
           if (( $(echo "$MEASURED_MASS_KG > $TARGET_MASS_KG" | bc -l) )); then

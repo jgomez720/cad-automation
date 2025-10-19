@@ -42,7 +42,7 @@ def get_total_mass() -> float:
 
         # Write it so GitHub Actions can use it later
         with open(os.getenv("GITHUB_ENV"), "a") as f:
-            print(f"MEASURED_MASS_KG={measure_mass_kg}", file=f)
+            f.write(f"MEASURED_MASS_KG=${measure_mass_kg}")
         
         return measure_mass_kg
     
