@@ -1,0 +1,46 @@
+name: Onshape Mass Check
+
+on:
+  workflow_dispatch:
+
+jobs:
+  mass-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run mass check script
+        env:
+          # Grab ACCESS and SECRET keys from GitHub Secrets
+          ONSHAPE_ACCESS_KEY: ${{ secrets.ONSHAPE_ACCESS_KEY }}
+          ONSHAPE_SECRET_KEY: ${{ secrets.ONSHAPE_SECRET_KEY }}
+          
+          # Grab DID, WID, and EID from GitHub Secrets
+          ONSHAPE_DID: ${{ secrets.ONSHAPE_DID }}    # Document ID
+          ONSHAPE_WID: ${{ secrets.ONSHAPE_WID }}    # Workspace ID
+          ONSHAPE_EID: ${{ secrets.ONSHAPE_EID }}    # Element ID
+
+        run: scripts/get_mass.py
+
+      - name: Compare mass to target
+        env:
+          TARGET_MASS_KG: ${{ secrets.TARGET_MASS }}
+        run: |
+          echo "Target mass (kg): $TARGET_MASS"
+          echo "Measured mass: $MEASURED_MASS_KG kg"
+
+          if (( $(echo "$MEASURED_MASS_KG > $TARGET_MASS_KG" | bc -l) )); then
+            echo "Mass is greater than allowable target mass. Please revise the design."
+            exit 1
+          else
+            echo "Mass check passed. Design is within target mass."
+          fi
