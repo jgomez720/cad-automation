@@ -21,8 +21,8 @@ jobs:
       - name: Run mass check script
         env:
           # Grab ACCESS and SECRET keys from GitHub Secrets
-          ONSHAPE_ACCESS_KEY: ${{ secrets.ONSHAPE_ACCESS_KEY }}
           ONSHAPE_SECRET_KEY: ${{ secrets.ONSHAPE_SECRET_KEY }}
+          ONSHAPE_ACCESS_KEY: ${{ secrets.ONSHAPE_ACCESS_KEY }}
           
           # Grab DID, WID, and EID from GitHub Secrets
           ONSHAPE_DID: ${{ secrets.ONSHAPE_DID }}    # Document ID

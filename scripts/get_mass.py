@@ -8,8 +8,8 @@ eid = os.environ["ONSHAPE_EID"]
 
 api_url = f"https://cad.onshape.com/api/partstudios/d/{did}/w/{wid}/e/{eid}/massproperties"
 
-SECRET_KEY = os.environ["SECRET_KEY"]
-ACCESS_KEY = os.environ["ACCESS_KEY"]
+ONSHAPE_SECRET_KEY = os.environ["ONSHAPE_SECRET_KEY"]
+ONSHAPE_ACCESS_KEY = os.environ["ONSHAPE_ACCESS_KEY"]
 
 # Define the header for the request 
 headers = { 
@@ -23,7 +23,7 @@ def get_total_mass() -> float:
 
     response = requests.get(api_url, 
                     params=params, 
-                    auth=(ACCESS_KEY, SECRET_KEY),
+                    auth=(ONSHAPE_ACCESS_KEY, ONSHAPE_SECRET_KEY),
                     headers=headers)
     
     # Check for request errors.
