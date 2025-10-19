@@ -29,7 +29,7 @@ jobs:
           ONSHAPE_WID: ${{ secrets.ONSHAPE_WID }}    # Workspace ID
           ONSHAPE_EID: ${{ secrets.ONSHAPE_EID }}    # Element ID
 
-        run: scripts/get_mass.py
+        run: python scripts/get_mass.py
 
       - name: Compare mass to target
         env:
