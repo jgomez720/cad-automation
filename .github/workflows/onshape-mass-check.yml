@@ -20,12 +20,20 @@ jobs:
 
       - name: Run mass check script
         env:
-          # Inject GitHub secrets into environment variables
+          # Grab ACCESS and SECRET keys from GitHub Secrets
           ONSHAPE_ACCESS_KEY: ${{ secrets.ONSHAPE_ACCESS_KEY }}
           ONSHAPE_SECRET_KEY: ${{ secrets.ONSHAPE_SECRET_KEY }}
           
-          # Regular env vars too (IDs, thresholds, etc.)
-          ONSHAPE_DID: ${{ vars.ONSHAPE_DID }}    # Document ID
-          ONSHAPE_WID: ${{ vars.ONSHAPE_WID }}    # Workspace ID
-          ONSHAPE_EID: ${{ vars.ONSHAPE_EID }}    # Element ID
+          # Grab DID, WID, and EID from GitHub Secrets
+          ONSHAPE_DID: ${{ secrets.ONSHAPE_DID }}    # Document ID
+          ONSHAPE_WID: ${{ secrets.ONSHAPE_WID }}    # Workspace ID
+          ONSHAPE_EID: ${{ secrets.ONSHAPE_EID }}    # Element ID
+
         run: scripts/get_mass.py
+
+      - name: Compare mass to target
+        env:
+          TARGET_MASS_KG: ${{ secrets.TARGET_MASS }}
+        run: |
+          echo "Target mass (kg): $TARGET_MASS"
+          echo "Measured mass: $MEASURED_MASS_KG kg"

@@ -38,6 +38,11 @@ def get_total_mass() -> float:
     else:
         print(json.dumps(response.json(), indent=4))
 
-        return response.json()["bodies"]["-all-"]["mass"][1]
+        measure_mass_kg = response.json()["bodies"]["-all-"]["mass"][1]
+
+        # Write it so GitHub Actions can use it later
+        with open(os.getenv("GITHUB_ENV"), "a") as f:
+            print(f"MEASURED_MASS_KG={measure_mass_kg}", file=f)
+        
+        return measure_mass_kg
     
-get_total_mass()
