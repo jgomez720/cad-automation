@@ -1,7 +1,7 @@
 import requests
 import json
 import os
-from scripts.onshape_hmac_signer import sign_request  # adjust import path if needed
+from onshape_hmac_signer import sign_request  # adjust import path if needed
 
 env_file = os.getenv('GITHUB_ENV')
 print(f"GITHUB_ENV file path: {env_file}")
