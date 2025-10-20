@@ -1,26 +1,40 @@
 import requests
 import json
 import os
-from onshape_hmac_signer import sign_request  # adjust import path if needed
+from hmac_signer import create_signature, generate_nonce
+from email.utils import formatdate
 
 env_file = os.getenv('GITHUB_ENV')
-print(f"GITHUB_ENV file path: {env_file}")
 
 did = os.environ["ONSHAPE_DID"]
 wid = os.environ["ONSHAPE_WID"]
 eid = os.environ["ONSHAPE_EID"]
-
-print(f"Document ID: {did}")
-print(f"Workspace ID: {wid}")
-print(f"Element ID: {eid}")
 
 api_url = f"https://cad.onshape.com/api/partstudios/d/{did}/w/{wid}/e/{eid}/massproperties"
 
 ONSHAPE_SECRET_KEY = os.environ["ONSHAPE_SECRET_KEY"]
 ONSHAPE_ACCESS_KEY = os.environ["ONSHAPE_ACCESS_KEY"]
 
+nonce = generate_nonce()
+current_date = formatdate(usegmt=True)
+
+signature = create_signature(
+    method="GET",
+    url=api_url,
+    nonce=nonce,  
+    authDate=current_date,
+    # contentType="application/json", not needed for GET
+    access_key=ONSHAPE_ACCESS_KEY,
+    secret_key=ONSHAPE_SECRET_KEY
+)
+print(signature)
+
 # Define the header for the request 
-headers = sign_request("GET", api_url, ONSHAPE_ACCESS_KEY, ONSHAPE_SECRET_KEY)
+headers = {
+    "Date": current_date,
+    "On-Nonce": nonce,
+    "Authorization": signature
+}
 
 def get_total_mass() -> float:
 
