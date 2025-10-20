@@ -1,6 +1,7 @@
 import requests
 import json
 import os
+from scripts.onshape_hmac_signer import sign_request  # adjust import path if needed
 
 env_file = os.getenv('GITHUB_ENV')
 print(f"GITHUB_ENV file path: {env_file}")
@@ -19,19 +20,11 @@ ONSHAPE_SECRET_KEY = os.environ["ONSHAPE_SECRET_KEY"]
 ONSHAPE_ACCESS_KEY = os.environ["ONSHAPE_ACCESS_KEY"]
 
 # Define the header for the request 
-headers = { 
-    'Accept': 'application/json;charset=UTF-8;qs=0.09',
-    'Content-Type': 'application/json'
-}
-
-params = {}
+headers = sign_request("GET", api_url, ONSHAPE_ACCESS_KEY, ONSHAPE_SECRET_KEY)
 
 def get_total_mass() -> float:
 
-    response = requests.get(api_url, 
-                    params=params, 
-                    auth=(ONSHAPE_ACCESS_KEY, ONSHAPE_SECRET_KEY),
-                    headers=headers)
+    response = requests.get(api_url, headers=headers)
     
     # Check for request errors.
     if response.status_code != 200:
