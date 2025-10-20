@@ -2,9 +2,16 @@ import requests
 import json
 import os
 
+env_file = os.getenv('GITHUB_ENV')
+print(f"GITHUB_ENV file path: {env_file}")
+
 did = os.environ["ONSHAPE_DID"]
 wid = os.environ["ONSHAPE_WID"]
 eid = os.environ["ONSHAPE_EID"]
+
+print(f"Document ID: {did}")
+print(f"Workspace ID: {wid}")
+print(f"Element ID: {eid}")
 
 api_url = f"https://cad.onshape.com/api/partstudios/d/{did}/w/{wid}/e/{eid}/massproperties"
 
