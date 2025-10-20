@@ -44,19 +44,10 @@ def get_total_mass() -> float:
     if response.status_code != 200:
         raise Exception(f"Error fetching mass properties: {response.status_code} - {response.text}")    
     
-    # Check to see if the part has a material assigned. 
-    if not response.json()["bodies"]["-all-"]["hasMass"]:
-        raise Exception("No material assigned to one or more parts in the Part Studio.")
-    
-    # If no errors, print the response and return the mass value in kg.
     else:
         print(json.dumps(response.json(), indent=4))
 
         measure_mass_kg = response.json()["bodies"]["-all-"]["mass"][1]
-
-        # Write it so GitHub Actions can use it later
-        with open(os.getenv("GITHUB_ENV"), "a") as f:
-            f.write(f"MEASURED_MASS_KG=${measure_mass_kg}")
         
         return measure_mass_kg
     
