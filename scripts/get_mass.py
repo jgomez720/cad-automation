@@ -53,3 +53,6 @@ def get_total_mass() -> float:
         
         return measure_mass_kg
     
+if __name__ == "__main__":
+    total_mass = get_total_mass()
+    print(f"Total mass of Part Studio: {total_mass} kg")
