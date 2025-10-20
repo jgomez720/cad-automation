@@ -4,7 +4,7 @@ import os
 from hmac_signer import create_signature, generate_nonce
 from email.utils import formatdate
 
-env_file = os.getenv('GITHUB_ENV')
+github_env = os.getenv('GITHUB_ENV')
 
 did = os.environ["ONSHAPE_DID"]
 wid = os.environ["ONSHAPE_WID"]
@@ -47,9 +47,12 @@ def get_total_mass() -> float:
     else:
         print(json.dumps(response.json(), indent=4))
 
-        measure_mass_kg = response.json()["bodies"]["-all-"]["mass"][1]
+        measured_mass_kg = response.json()["bodies"]["-all-"]["mass"][1]
+        with open(github_env, "a") as f:
+            
+            f.write(f"MEASURED_MASS_KG={measured_mass_kg}\n")  # no '$', include newline
         
-        return measure_mass_kg
+        return measured_mass_kg
     
 if __name__ == "__main__":
     total_mass = get_total_mass()
